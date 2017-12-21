@@ -1,0 +1,87 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+
+.animation1{
+  animation: sd 0.5s ease-in forwards;
+
+}
+
+/*@keyframes sd {
+  100% { transform: translateY(0%) }
+  0% { transform: translateY(500px); }
+}*/
+
+
+@keyframes sd {
+0% { transform: rotateX(0deg) }
+
+50% { transform: rotateY(180deg) }
+
+  100%{ transform: rotateZ(360deg); }
+}
+
+
+
+
+.animation2{
+  animation: sd2 0.5s ease-in forwards;
+
+}
+
+
+@keyframes sd2 {
+  0% { transform: translateY(500%) }
+  100% { transform: translateY(0px); }
+}
+
+
+
+
+.animation3{
+  animation: sd3 0.5s ease-in forwards;
+
+}
+
+
+@keyframes sd3 {
+0% { transform: rotate(180deg) }
+
+  100%{ transform: rotate(360deg); }
+}
+
+.error{
+font-size: 16px;
+  color:darkred ;
+  border: 1px solid red;
+
+}
+
+#page-numbers a.active{
+  background-color:aqua;
+ }

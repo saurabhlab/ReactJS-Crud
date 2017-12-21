@@ -1,0 +1,36 @@
+{
+  "name": "dropdownforreactjs",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "alertify": "^0.3.0",
+    "alertify.js": "^1.0.12",
+    "auth0-js": "^8.6.0",
+    "axios": "^0.16.1",
+    "jquery": "^3.2.1",
+    "jwt-decode": "^2.2.0",
+    "react": "^15.5.4",
+    "react-bootstrap": "^0.31.0",
+    "react-confirm-alert": "^1.0.5",
+    "react-dom": "^15.5.4",
+    "react-jquery-datatables": "^0.7.1",
+    "react-notify-toast": "^0.1.5",
+    "react-redux": "^5.0.4",
+    "react-router-dom": "^4.1.1",
+    "react-widgets": "^3.4.6",
+    "redux": "^3.6.0",
+    "redux-form": "^6.6.3",
+    "redux-immutable-state-invariant": "^2.0.0",
+    "redux-mediaquery": "^0.10.0",
+    "redux-promise": "^0.5.3"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

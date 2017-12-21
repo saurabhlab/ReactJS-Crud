@@ -1,0 +1,159 @@
+actions/index.js==>>
+
+
+//delete code
+
+export function Deleted(id){
+    alert(id);
+    const request=axios.delete(`${ROOT_URL}/${id}`);
+    console.log(request);
+
+    return{
+        type:"DELETE",
+        payload:request
+    }
+}
+//-----------------
+
+
+Container/Get_Customer.js==>>
+
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import GetMethod from '../actions/index';
+//import rootReducer from '../reducer';
+import {selectCustomer}  from '../actions/index';
+import {Deleted} from '../actions/index';
+
+
+
+import {NavLink} from 'react-router-dom'
+class GetIndex extends Component{
+    componentWillMount(){
+        this.props.GetMethod();
+//this.props.selectCustomer();
+
+    }
+
+renderCustomer(){
+               
+    if (!this.props.bb)
+     {
+        return (
+            <div><h3>Loading..</h3></div>
+        );
+     }
+
+        return(
+            <div className="col-lg-6"> <h1>This is Get data</h1>
+          <NavLink replace to={{ pathname: '/CreateMyForm' }} className="btn btn-success"> Create</NavLink>
+
+            <table className="table table-border table-striped " style={{ "border": "2px solid gray","margin":"10px" }}>
+
+                    <thead>
+                        <tr >
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>College</th>
+                            <th>Option</th>
+
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {this.props.bb.map((item, key) => {
+                            return ( <tr key={key}>
+                                    <td> {item.ID}</td>
+                                    <td> {item.Name}</td>
+                                    <td> {item.Email}</td>
+                                    <td> {item.Age}</td>
+                                    <td> {item.Address}</td>
+                                    <td> {item.College}</td>
+                                    <td> <button className="btn btn-danger" onClick={()=>this.props.Deleted(item.ID)}>DELETE </button>-   
+                                   <NavLink to={{ pathname: '/CustomerDetail'+item.ID}} className="btn btn-success" onClick={()=> this.props.selectCustomer(item)}> Detail</NavLink>
+                                     
+                                   
+                                    
+                                    </td>
+                                </tr>)
+                            
+                        })}
+
+                    </tbody>
+                </table>
+            
+            
+            </div>
+        )}
+
+    render(){
+        return(
+           <div>
+                {this.renderCustomer()}
+           </div>
+        );
+    }
+}
+
+
+
+function mapStateToProps(state){
+    console.log("container state",state.getdata.all);
+    return{
+    bb:state.getdata.all
+    };
+}
+
+
+ function mapdispatchtoprops(dispatch) {
+
+     return bindActionCreators({GetMethod:GetMethod , selectCustomer:selectCustomer ,Deleted:Deleted}, dispatch);
+ }
+
+
+
+export default connect(mapStateToProps,mapdispatchtoprops)(GetIndex);
+
+
+
+
+
+
+        
+// //delection code
+// function mapdispatchtoprops(dispatch) {
+
+//     return bindActionCreators({ delaction: Delaction,selectCustomer: selectCustomer }, dispatch);
+// }
+
+// ////detail of customer
+// // function mapDispatchToProps(dispatch){
+// //     return bindActionCreators({selectCustomer: selectCustomer}, dispatch  )
+// // }
+
+
+// export default connect(mapStateToProps,mapdispatchtoprops)(Hello2);
+
+
+//----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

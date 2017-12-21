@@ -1,0 +1,286 @@
+actions/indexs.js==>>
+
+//Display details of customer using id
+
+export function selectCustomer(d){
+    //alert("hii");
+    console.log("action/index",d);
+
+    return{
+        type: 'CUSTOMER_SELECTED',
+        D:d
+    };
+}
+
+
+//-----------------
+
+
+reducer/ActiveCustomer.js==>>
+
+export default function(state=null, action){
+   
+   //console.log("action d",action.D);
+    switch(action.type){
+
+        
+        case 'CUSTOMER_SELECTED':
+            return action.D;
+
+            default : return state;
+    }
+}
+///--------------
+
+reducer/index.js==>>
+
+import ActiveCustomer from './ActiveCustomer';
+import {combineReducers} from 'redux';
+
+const rootReducer = combineReducers({
+    
+    getdata: GetCustomer,
+    form: formReducer,
+    activeCustomer: ActiveCustomer
+
+});
+
+export default rootReducer;  
+//------------
+
+
+Container/CustomerDetail.js==>>
+
+
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
+
+
+ class CustomerDetail extends Component{
+    render(){
+
+    if (!this.props.cust) {
+        //console.log("cust",this.props.cust );
+      return (
+        <div><h3>Select a book to get started. </h3></div>
+      )
+    }
+   return(    
+            <div style={{'border':'2px solid gray','marginRight':'80px'}}>
+            <div> <h1>CustomerDetail </h1>
+            <div> <h3  > Customer Name :</h3><h4 className="clsbookdetail">{this.props.cust.Name}</h4></div>
+             <div><h3  > Email :</h3><h4 className="clsbookdetail" >{this.props.cust.Email} </h4></div>
+
+             <div><h3  > Age :</h3><h4 className="clsbookdetail" >{this.props.cust.Age} </h4></div>
+            </div>
+             </div>
+ )
+               
+    }
+}
+
+
+function mapStateToProps(state){
+
+        console.log("active",state.activeCustomer);
+
+    return {
+        cust:state.activeCustomer
+ 
+    };
+ }
+
+export default connect(mapStateToProps)(CustomerDetail);
+
+
+
+//--------------
+
+Container/Get_Customer.js==>>
+
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import GetMethod from '../actions/index';
+//import rootReducer from '../reducer';
+import {selectCustomer}  from '../actions/index';
+
+import {Deleted} from '../actions/index';
+
+
+
+import {NavLink} from 'react-router-dom'
+class GetIndex extends Component{
+    componentWillMount(){
+        this.props.GetMethod();
+//this.props.selectCustomer();
+
+    }
+
+renderCustomer(){
+               
+    if (!this.props.bb)
+     {
+        return (
+            <div><h3>Loading..</h3></div>
+        );
+     }
+
+        return(
+            <div className="col-lg-6"> <h1>This is Get data</h1>
+          <NavLink replace to={{ pathname: '/CreateMyForm' }} className="btn btn-success"> Create</NavLink>
+
+            <table className="table table-border table-striped " style={{ "border": "2px solid gray","margin":"10px" }}>
+
+                    <thead>
+                        <tr >
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>College</th>
+                            <th>Option</th>
+
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {this.props.bb.map((item, key) => {
+                            return ( <tr key={key}>
+                                    <td> {item.ID}</td>
+                                    <td> {item.Name}</td>
+                                    <td> {item.Email}</td>
+                                    <td> {item.Age}</td>
+                                    <td> {item.Address}</td>
+                                    <td> {item.College}</td>
+                                    <td> <button className="btn btn-danger" onClick={()=>this.props.Deleted(item.ID)}>DELETE </button>-   
+                                   <NavLink to={{ pathname: '/CustomerDetail'}} className="btn btn-success" onClick={()=> this.props.selectCustomer(item)}> Detail</NavLink>
+                                     
+                                   
+                                    
+                                    </td>
+                                </tr>)
+                            
+                        })}
+
+                    </tbody>
+                </table>
+            
+            
+            </div>
+        )}
+
+    render(){
+        return(
+           <div>
+                {this.renderCustomer()}
+           </div>
+        );
+    }
+}
+
+
+
+function mapStateToProps(state){
+    console.log("container state",state.getdata.all);
+    return{
+    bb:state.getdata.all
+    };
+}
+
+
+ function mapdispatchtoprops(dispatch) {
+
+     return bindActionCreators({GetMethod:GetMethod, Deleted:Deleted, selectCustomer:selectCustomer }, dispatch);
+ }
+
+
+
+export default connect(mapStateToProps,mapdispatchtoprops)(GetIndex);
+//export default connect(mapStateToProps,mapdispatchtoprops)(GetIndex);
+
+//------
+
+
+
+
+        
+// //delection code
+// function mapdispatchtoprops(dispatch) {
+
+//     return bindActionCreators({ delaction: Delaction,selectCustomer: selectCustomer }, dispatch);
+// }
+
+// ////detail of customer
+// // function mapDispatchToProps(dispatch){
+// //     return bindActionCreators({selectCustomer: selectCustomer}, dispatch  )
+// // }
+
+
+// export default connect(mapStateToProps,mapdispatchtoprops)(Hello2);
+
+//--------------
+
+
+
+Components/App.js==>>
+
+import CustomerDetail  from '../Container/CustomerDetail';
+
+--
+
+-
+-
+-
+<Router>
+
+<div>
+
+<Links/>
+
+<Route path="/" render={()=> <h1>---Welcome---</h1> }/>
+
+<Route path="/About" render={()=> <h1>about </h1> }/>
+
+<Route path="/contact" render={()=> <h1>contact </h1> }/>
+
+<Route path="/GetCustomer" component={GetIndex}/>
+
+<Route path="/CreateMyForm" component={CreateMyForm}/>
+
+<Route path="/CustomerDetail" component={CustomerDetail}/>
+
+</div>
+
+</Router>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

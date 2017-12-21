@@ -1,0 +1,214 @@
+strorepro==>>
+
+create PROCEDURE Paging
+(
+  @Page int
+)
+AS
+SET NOCOUNT ON;
+declare @PageSize int;
+set @PageSize=5;
+SELECT TOP(@PageSize) * FROM 
+(
+ SELECT RowID = ROW_NUMBER() OVER (ORDER BY ID), 
+  * ,TotalRows=Count(*) OVER()
+ FROM StudentMs 
+) 
+A WHERE A.RowID > ((@Page-1)*@PageSize)
+SET NOCOUNT OFF
+
+//--------------
+
+
+
+Api==>>>
+
+
+
+        public IHttpActionResult GetStudents(string count = null, string page = "1")
+        {
+
+            if (count != null)
+            {
+                var a = db.Students.Count();
+                return Ok(a);
+            }
+            else
+            {
+                var z = Int32.Parse(page);
+                var y = db.Students.SqlQuery("Paging " + z).ToList();
+
+                return Ok(y);
+
+            }
+      
+        }
+
+//-------------
+
+
+
+
+
+
+
+actions/index==>>
+
+export default function GetMethod(a){
+        var a =a;
+    const request =axios.get(`${ROOT_URL}?page=${a}`);
+ //console.log("fffc"+request);
+
+return{
+    type:GET_DATA,
+    payload: request
+};
+
+} 
+
+
+//paging
+export function getcount(){
+    const request=axios.get(`${ROOT_URL}?count=a`);
+    return{
+        type:"GETCOUNT",
+        payload:request
+    }
+
+}
+
+
+//------------------
+
+
+reducer/reducer_get.js==>>
+
+
+//----
+
+
+
+case "GETCOUNT":
+           
+            return {...state,count:action.payload.data};
+
+
+
+
+
+
+
+//-----------
+
+Container/Get_Customer.js==>>
+
+import {getcount} from '../actions/index';
+--
+--
+
+
+ constructor() {      
+  super();       
+ this.state = {  
+         currentPage: 1, 
+         todosPerPage:5
+       
+    
+ };
+       this.handleClick = this.handleClick.bind(this);
+      }
+
+
+
+    componentWillMount(){
+
+   this.props.getcount().then(()=>{
+ 
+      this.props.GetMethod(this.state.currentPage);
+ 
+  });
+  
+}
+handleClick(event) {
+      
+  this.setState({currentPage:event.target.id})
+      
+  this.props.GetMethod(event.target.id);
+
+
+ --
+--
+
+renderCustomer(){
+
+       const todosPerPage=this.state.todosPerPage;
+   
+   const pageNumbers = [];
+ 
+    for(let i = 1; i <= Math.ceil(this.props.count / todosPerPage); 
+i++)
+ {
+   
+       pageNumbers.push(i);
+    
+ }
+       
+ console.log("pagenumber",pageNumbers);
+      
+  const renderPageNumbers = pageNumbers.map(number => {
+      
+    return(
+     
+       <li
+          
+    key={number}
+          
+    id={number}
+            
+  onClick={this.handleClick}
+ 
+           >
+           
+  <a id={number}> {number} </a>
+      
+      </li>
+        
+  );
+       
+ });
+--
+--
+--
+    <ul id="page-numbers" className="pagination">
+         
+                   {renderPageNumbers}
+             </ul>
+ 
+
+
+--
+
+--
+
+
+function mapStateToProps(state){
+   console.log("container state",state);
+    return{
+    bb:state.getdata.all,
+    count:state.getdata.count
+    };
+}
+
+
+function mapdispatchtoprops(dispatch) {
+
+     return bindActionCreators({GetMethod:GetMethod, Deleted:Deleted, GetPost1:GetPost1,getcount:getcount }, dispatch);
+ }
+
+
+
+
+export default connect(mapStateToProps,mapdispatchtoprops)(GetIndex);
+//export default connect(mapStateToProps,mapdispatchtoprops)(GetIndex);
+
+

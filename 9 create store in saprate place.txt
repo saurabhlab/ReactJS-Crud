@@ -1,0 +1,56 @@
+src/store/configurestore.js==>>
+
+
+import reduximmutablestateinvariant from "redux-immutable-state-invariant";
+
+import { createStore, applyMiddleware } from "redux";
+
+import Reducers from "../reducer";
+
+import promise from 'redux-promise';
+
+
+export default function ConfigureStore(initialestate){
+    return createStore(
+    Reducers,
+    initialestate,
+    applyMiddleware(reduximmutablestateinvariant(),promise)
+    );
+}
+
+
+
+//----------
+
+
+
+src/index.js==>>
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+import App from './Components/App';
+import './index.css';
+
+import { Provider } from "react-redux";
+
+
+
+
+
+
+import ConfigureStore from "./store/configurestore";
+
+ const store=ConfigureStore();
+
+//console.log("red",Reducers);
+
+ReactDOM.render(
+<Provider store={store}>
+<App  />
+</Provider>,
+document.getElementById('root')
+);
+
